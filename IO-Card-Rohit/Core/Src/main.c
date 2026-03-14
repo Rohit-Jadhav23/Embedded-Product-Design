@@ -151,7 +151,7 @@ int main(void)
 	txHeader.DLC = 8;
 	txHeader.IDE = CAN_ID_STD;
 	txHeader.RTR = CAN_RTR_DATA;
-	txHeader.StdId = 0X030; //fixed ID for OS to receive
+	txHeader.StdId =(0x7D0 + Card[3]) <<5; //0X030; //fixed ID for OS to receive
 	txHeader.ExtId = 0x02;
 	txHeader.TransmitGlobalTime = DISABLE;
 
