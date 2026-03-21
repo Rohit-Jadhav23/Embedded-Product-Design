@@ -151,7 +151,7 @@ int main(void)
 	txHeader.DLC = 8;
 	txHeader.IDE = CAN_ID_STD;
 	txHeader.RTR = CAN_RTR_DATA;
-	txHeader.StdId =(0x7D0 + Card[3]) <<5; //0X030; //fixed ID for OS to receive
+	txHeader.StdId =0x200 + Card[3]; //0X030; //fixed ID for OS to receive//variable ID for OS to receive 0x200 + Card[3] is used to send the message to OS as per the card number. For example, if card number is 4, then the ID will be 0x204. This allows OS to identify which card has sent the message.
 	txHeader.ExtId = 0x02;
 	txHeader.TransmitGlobalTime = DISABLE;
 
