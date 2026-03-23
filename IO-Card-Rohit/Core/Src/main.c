@@ -3,9 +3,9 @@
   ******************************************************************************
   * @file           : main.c
   * @brief          : Main program body
-  * Created on      : 24-Feb-2026
+  * Created on      : 23-Mar-2026
   * Author          : Rohit Jadhav
-  * Hex Version     : IO-Card-Rohit.hex (1Mbps)
+  * Hex Version     : IO-Card-V1.3.hex (1Mbps) 
   ******************************************************************************
   * @attention
   *
@@ -57,9 +57,7 @@ CAN_TxHeaderTypeDef txHeader; //CAN Bus Receive Header
 uint8_t canRX[8] = {0,0,0,0,0,0,0,0};  //CAN Bus Receive Buffer
 CAN_FilterTypeDef canfil; //CAN Bus Filter
 uint32_t canMailbox; //CAN Bus Mail box variable
-uint8_t j=0;
-uint32_t  x=0;
-unsigned char c=0;
+
 unsigned char Card[4]={0x04,0x00,0x00,0x00};
 int receive_flag; // detection of received message on CAN
 unsigned int operation,pin_no,pin_dir,pin_status; //Detection of operation
@@ -165,6 +163,7 @@ int main(void)
 		HAL_CAN_Stop(&hcan1);
 		HAL_Delay(100);
 		HAL_CAN_Start(&hcan1);
+    HAL_CAN_ActivateNotification(&hcan1,CAN_IT_RX_FIFO0_MSG_PENDING);
 	}
 
 	HAL_GPIO_WritePin(GPIOG, D_Pin, 0);
@@ -566,17 +565,18 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan1)
 {
-
-	if(HAL_CAN_GetRxMessage(hcan1, CAN_RX_FIFO0, &rxHeader, canRX)==HAL_OK){
-		  operation = canRX[0];
-			pin_no = canRX[1];
-			pin_dir = canRX[2];
-			pin_status = canRX[3];
-			receive_flag = 1;
-	}
-	else{
-		Error_Handler();
-	}
+    if(HAL_CAN_GetRxMessage(hcan1, CAN_RX_FIFO0, &rxHeader, canRX) == HAL_OK)
+    {
+        operation  = canRX[0];
+        pin_no     = canRX[1];
+        pin_dir    = canRX[2];
+        pin_status = canRX[3];
+        receive_flag = 1;
+    }
+    else
+    {
+        Error_Handler();
+    }
 }
 /* USER CODE END 4 */
 

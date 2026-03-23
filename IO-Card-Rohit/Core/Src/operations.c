@@ -8,7 +8,7 @@
 #include "main.h"
 #include "operations.h"
 #include "stm32f4xx_hal.h"
-#include "Engine.h"
+#include "engine.h"
 extern uint32_t canMailbox;
 extern CAN_HandleTypeDef hcan1;
 extern CAN_RxHeaderTypeDef rxHeader; //CAN Bus Transmit Header
@@ -33,7 +33,7 @@ void single_read()
 
 void single_write()
 {
-	uint8_t csend[] = {operation,pin_no,0x00,0x00};
+	uint8_t csend[] = {0x02,pin_no,0x00,0x00};
 	//pin_no=1;
 	Control_line(pin_no);
 	HAL_CAN_AddTxMessage(&hcan1,&txHeader,csend,&canMailbox);
@@ -41,13 +41,13 @@ void single_write()
 }
 
 
-void multiple_read()
+void multiple_read()//0x03 
 {
 	card_read();
 	HAL_CAN_AddTxMessage(&hcan1,&txHeader,result,&canMailbox);
 }
 
-void card_status()
+void card_status()//0x04
 {
 	Card_select();
 	HAL_CAN_AddTxMessage(&hcan1,&txHeader,Card,&canMailbox);
